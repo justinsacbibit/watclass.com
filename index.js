@@ -10,6 +10,6 @@ app.get('/', function(req, res) {
   var classes = ['DEATH KNIGHT', 'DRUID', 'HUNTER', 'MAGE', 'MONK', 'PALADIN', 'PRIEST', 'ROGUE', 'SHAMAN', 'WARLOCK', 'WARRIOR'];
   var random = Math.floor(Math.random() * 11);
   var spec = Math.floor(Math.random() * ((random === 1) ? 4 : 3));
-  res.render('index', { title: specs[random][spec] + classes[random] });
+  res.render('index', { title: specs[random][spec] + ' ' + classes[random] });
 });
 app.listen(port);
