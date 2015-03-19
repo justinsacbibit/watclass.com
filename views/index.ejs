@@ -36,6 +36,11 @@
   <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
+    var messages = <%- JSON.stringify(messages) %>
+    for (var i = 0; i < messages.length; i++) {
+      $('#messages').append($('<li>').text(messages[i]));
+    }
+
     $('#tex').on('click', function(e) {
 
     });
@@ -53,7 +58,7 @@
 
     socket.on('message', function(msg) {
       var len = $('ul#messages li').length;
-      if (len > 10) {
+      if (len >= 10) {
         $('ul#messages li').eq(0).remove();
       }
       $('#messages').append($('<li>').text(msg));

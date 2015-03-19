@@ -55,6 +55,8 @@ var randomizeShit = function randomizeShit(req) {
   };
 };
 
+var lastTenMsgs = [];
+
 app.get('/', function(req, res) {
   var randomizedShit = randomizeShit(req);
   var random = randomizedShit.random;
@@ -63,7 +65,7 @@ app.get('/', function(req, res) {
   // io.emit('generated', specs[random][spec] + ' ' + classes[random]);
 
   var checkboxes = randomizedShit.checkboxes;
-  res.render('index', { title: specs[random][spec] + ' ' + classes[random], link: '', toggle: 'Click to hide specializations', toggleLink: '/nospec',checkboxes:checkboxes });
+  res.render('index', { messages: lastTenMsgs, title: specs[random][spec] + ' ' + classes[random], link: '', toggle: 'Click to hide specializations', toggleLink: '/nospec',checkboxes:checkboxes });
 });
 
 app.get('/nospec', function(req, res) {
@@ -80,6 +82,7 @@ io.on('connection', function(socket) {
   console.log('a user connected');
 
   socket.on('message', function(msg) {
+    lastTenMsgs.push(msg);
     io.emit('message', msg);
   })
 
