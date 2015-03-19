@@ -45,7 +45,8 @@
     $('form').submit(function() {
       if ($('#m').val() === '')
         return false;
-      socket.emit('message', $('#m').val());
+      console.log($('#watclass span').text());
+      socket.emit('message', $('#watclass').text() + ': '+ $('#m').val());
       $('#m').val('');
       return false;
     })
