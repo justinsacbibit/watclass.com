@@ -1,5 +1,7 @@
 var express = require('express'),
-    app = express();
+    app = express(),
+    http = require('http').Server(app),
+    io = require('socket.io')(http);
 
 var port = process.env.PORT || 8080;
 
@@ -57,6 +59,9 @@ app.get('/', function(req, res) {
   var randomizedShit = randomizeShit(req);
   var random = randomizedShit.random;
   var spec = randomizedShit.spec;
+
+  // io.emit('generated', specs[random][spec] + ' ' + classes[random]);
+
   var checkboxes = randomizedShit.checkboxes;
   res.render('index', { title: specs[random][spec] + ' ' + classes[random], link: '', toggle: 'Click to hide specializations', toggleLink: '/nospec',checkboxes:checkboxes });
 });
@@ -64,8 +69,23 @@ app.get('/', function(req, res) {
 app.get('/nospec', function(req, res) {
   var randomizedShit = randomizeShit(req);
   var random = randomizedShit.random;
+
+  // io.emit('generated', classes[random]);
+
   var checkboxes = randomizedShit.checkboxes
   res.render('index', { title: classes[random], link: 'nospec', toggle: 'Click to randomize specializations', toggleLink: '/',checkboxes:checkboxes });
 });
 
-app.listen(port);
+io.on('connection', function(socket) {
+  console.log('a user connected');
+
+  socket.on('message', function(msg) {
+    io.emit('message', msg);
+  })
+
+  socket.on('disconnect', function() {
+    console.log('a user connected');
+  });
+});
+
+http.listen(port);

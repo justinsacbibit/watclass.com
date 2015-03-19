@@ -2,18 +2,29 @@
 <html>
 <head>
   <title>WAT CLASS</title>
-  <style type="text/css">* {margin: 0;} html, body {height: 100%;} .wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -8em;} .footer, .push {height: 8em;}</style>
+  <style type="text/css">* {margin: 0;} html, body {height: 100%;} .wrapper {min-height: 100%; height: auto !important; height: 100%; margin: 0 auto -15em;} .footer, .push {height: 15em;} .wrapper center {color: #333; font-family: Courier;} ul {list-style-type:none; margin:0; padding:0;}</style>
 </head>
 <body>
   <div class="wrapper">
-    <center style="color: #333; padding-top: 200px; font-family: Courier; font-size: 24px; font-weight: bold;"><a href="/<%= link %>" rel="nofollow" style="text-decoration: none; color: #333;">PLAY <span id="watclass"><%= title %></span></a>
+    <center id="first" style="padding-top: 100px; font-size: 24px; font-weight: bold;"><a id="tex" href="#/<%= link %>" rel="nofollow" style="text-decoration: none; color: #333;">PLAY <span id="watclass"><%= title %></span></a>
+    </center>
+    <center style="padding-top: 75px;">
+      <!-- <span style="font-weight:bold;">REAL TIME FEED OF WHAT OTHERS WILL BE PLAYING</span> -->
+      <ul id="messages"></ul>
     </center>
     <div class="push"></div>
   </div>
+  <div>
+  </div>
   <div class="footer">
+    <center style="margin-bottom:100px;">
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </center>
     <center style="color: #333; font-family: Courier; font-size: 11px;">
       <a href="<%= toggleLink %>" style="text-decoration:none;"><%= toggle %></a>
-      <form action="<% link %>" style="padding-top:20px;">
+      <form action="<% link %>" style="margin-top:20px;">
         <%- checkboxes %>
         <br><br>
         <input type="submit" value="Filter">
@@ -21,5 +32,40 @@
       <!-- <br /><br />&copy; Copyright 2015 Justin Sacbibit - All Rights Reserved -->
     </center>
   </div>
+
+  <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $('#tex').on('click', function(e) {
+
+    });
+
+    var socket = io();
+
+    $('form').submit(function() {
+      if ($('#m').val() === '')
+        return false;
+      socket.emit('message', $('#m').val());
+      $('#m').val('');
+      return false;
+    })
+
+    socket.on('message', function(msg) {
+      var len = $('ul#messages li').length;
+      if (len > 10) {
+        $('ul#messages li').eq(0).remove();
+      }
+      $('#messages').append($('<li>').text(msg));
+    });
+
+    socket.on('generated', function(v) {
+      var len = $('ul#messages li').length;
+      if (len > 10) {
+        $('ul#messages li').eq(len-1).remove();
+      }
+      $('#messages').prepend($('<li>').text(v));
+      // alert(v);
+    });
+  </script>
 </body>
 </html>
