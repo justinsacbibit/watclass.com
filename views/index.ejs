@@ -18,7 +18,7 @@
   </div>
   <div class="footer">
     <center style="margin-bottom:100px;">
-      <form action="">
+      <form id="chat" action="">
         <input id="m" autocomplete="off" /><button>Send</button>
       </form>
     </center>
@@ -41,13 +41,11 @@
       $('#messages').append($('<li>').text(messages[i]));
     }
 
-    $('#tex').on('click', function(e) {
 
-    });
 
     var socket = io();
 
-    $('form').submit(function() {
+    $('form#chat').submit(function() {
       if ($('#m').val() === '')
         return false;
       console.log($('#watclass span').text());

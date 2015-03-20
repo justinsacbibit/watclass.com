@@ -75,7 +75,7 @@ app.get('/nospec', function(req, res) {
   // io.emit('generated', classes[random]);
 
   var checkboxes = randomizedShit.checkboxes
-  res.render('index', { title: classes[random], link: 'nospec', toggle: 'Click to randomize specializations', toggleLink: '/',checkboxes:checkboxes });
+  res.render('index', { messages: lastTenMsgs, title: classes[random], link: 'nospec', toggle: 'Click to randomize specializations', toggleLink: '/',checkboxes:checkboxes });
 });
 
 io.on('connection', function(socket) {
